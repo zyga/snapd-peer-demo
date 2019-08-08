@@ -1,0 +1,6 @@
+#!/bin/sh
+(
+    echo "hook $0 $@" 
+    mkdir -vp "$SNAP_COMMON/peers"
+    snapctl stop --disable "$SNAP_NAME.peer-helper"
+) >> $SNAP_COMMON/hook.log

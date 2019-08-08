@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "I am program $SNAP_NAME"
+echo "my peers are: $(find "$SNAP_COMMON/peers/" -type f)"

@@ -1,0 +1,40 @@
+name: program-foo
+version: 1.0
+confinement: classic
+
+apps:
+    # This is the main program in the package.
+    program-foo:
+        command: bin/program
+    # This service is started when another snap is
+    # installed and a relation is established between
+    # them, by connecting to the "peers" interface.
+    peer-helper:
+        daemon: oneshot
+        command: bin/peer-helper
+
+hooks:
+    # The install hook is there to ensure that
+    # "peer-helper" service is not started automatically.
+    # Snapd currently lacks the language to describe that
+    # declaratively. The hook simply disables the service.
+    install:
+    # The connect and disconnect hooks on the "peers" plug fire after
+    # successful connection and disconnection, respectively. The connect hook
+    # uses snapctl to start the peer-helper service, which can do background
+    # processing on, for example, data provided by the peer. The disconnect
+    # hook is less sophisticated and just logs the activity. Both hooks work to
+    # maintain state describing the set of connected peers.
+    connect-plug-peers:
+    disconnect-plug-peers:
+
+plugs:
+    peers:
+        interface: content
+        content: peer-exchange
+        # Given that the snaps are using classic confinement and classic snaps
+        # do not yet use any mount namespace, the actual content connection
+        # does not result in any mounted, shared content. This interface is
+        # only used for the event notification upon connection and
+        # disconnection.
+        target: $SNAP_COMMON/.peers

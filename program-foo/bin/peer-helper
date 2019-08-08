@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Peer helper service for snap $SNAP_NAME"
+echo "my peers are: $(find "$SNAP_COMMON/peers/" -type f)"

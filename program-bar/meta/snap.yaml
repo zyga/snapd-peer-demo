@@ -1,0 +1,26 @@
+name: program-bar
+version: 1.0
+confinement: classic
+
+apps:
+    program-bar:
+        command: bin/program
+
+slots:
+    # The peer-info slot of type content[peer-exchange]. It can be connected to
+    # program-foo's peers plug. 
+    peer-info:
+        interface: content
+        content: peer-exchange
+        # The name attribute is not defined by the snapd content interface.
+        # Snapd allows arbitrary additional attributes that can be inspected
+        # prior to or after connection. We use this attribute to tell the side
+        # connecting to us more about what we are.
+        name: bar
+        source:
+            # Given that the snaps are using classic confinement and classic
+            # snaps do not yet use any mount namespace, the actual content
+            # connection does not result in any mounted, shared content. This
+            # interface is only used for the event notification upon connection
+            # and disconnection.
+            read: [$SNAP/.peer-info/bar]

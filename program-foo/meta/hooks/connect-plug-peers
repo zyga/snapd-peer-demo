@@ -1,0 +1,10 @@
+#!/bin/sh
+peer="$(snapctl get --slot :peers name)"
+(
+    echo "hook $0 $@"
+    echo "connected to peer $peer"
+    touch "$SNAP_COMMON/peers/$peer"
+    echo "starting scrubber service"
+    snapctl start $SNAP_NAME.peer-helper
+    echo "started scrubber service"
+) >> "$SNAP_COMMON/hook.log"
